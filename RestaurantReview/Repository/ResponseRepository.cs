@@ -29,10 +29,28 @@ namespace RestaurantReview.Repository
             return _context.Responses.Where(r => r.Comment.Id == Id).ToList();
         }
 
+        public bool ResponseExist(Guid Id)
+        {
+            if (_context.Responses.Any(r => r.Id == Id))
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
         public bool Save()
         {
             var saved = _context.SaveChanges();
             return saved > 0 ? true : false;
+        }
+
+        public bool UpdateResponse(Response response)
+        {
+            _context.Update(response);
+            return Save();
         }
     }
 }

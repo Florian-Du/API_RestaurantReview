@@ -110,5 +110,41 @@ namespace RestaurantReview.Controllers
 
             return Ok("Création réussie");
         }
+
+        [HttpPut("{Id}")]
+        public IActionResult UpdateNote(string Id, [FromBody] ResponseDto updatedNote)
+        {
+            if (updatedNote == null)
+            {
+                return BadRequest(ModelState);
+            }
+
+            Guid NoteId = Guid.Parse(Id);
+
+            if (NoteId != updatedNote.Id)
+            {
+                return BadRequest(ModelState);
+            }
+
+            if (!_noteInterface.NoteExist(NoteId))
+            {
+                return NotFound();
+            }
+
+            if (!ModelState.IsValid)
+            {
+                return BadRequest();
+            }
+
+            var NoteMap = _mapper.Map<Note>(updatedNote);
+
+            if (!_noteInterface.UpdateNote(NoteMap))
+            {
+                ModelState.AddModelError("", "Erreur lors de la mise à jour de la réponse");
+                return StatusCode(500, ModelState);
+            }
+
+            return NoContent();
+        }
     }
 }

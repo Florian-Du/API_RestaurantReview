@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Azure;
+using Microsoft.EntityFrameworkCore;
 using RestaurantReview.Data;
 using RestaurantReview.Interfaces;
 using RestaurantReview.Models;
@@ -55,6 +56,12 @@ namespace RestaurantReview.Repository
         {
             var saved = _context.SaveChanges();
             return saved > 0 ? true : false;
+        }
+
+        public bool UpdateNote(Note note)
+        {
+            _context.Update(note);
+            return Save();
         }
     }
 }
