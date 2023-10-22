@@ -21,6 +21,17 @@ namespace RestaurantReview.Repository
             return Save();
         }
 
+        public bool DeleteNote(Note note)
+        {
+            _context.Remove(note);
+            return Save();
+        }
+
+        public Note getNote(Guid Id)
+        {
+            return _context.Notes.Where(n => n.Id == Id).FirstOrDefault();
+        }
+
         public int getNoteRestaurant(Guid RestaurantId)
         {
             ICollection<Note> Notes =  _context.Notes.Where(n => n.Restaurant.Id == RestaurantId).Include(u => u.User).ToList();

@@ -6,9 +6,11 @@ namespace RestaurantReview.Interfaces
     {
         ICollection<Response> GetResponses();
         ICollection<Response> GetResponsesComment(Guid Id);
+        Response GetResponse(Guid Id);
         bool ResponseExist(Guid Id);
         bool CreateResponse(Response response);
         bool UpdateResponse(Response response);
+        bool DeleteResponse(Response response);
         bool Save();
 
     }

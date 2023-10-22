@@ -19,6 +19,17 @@ namespace RestaurantReview.Repository
             return Save();
         }
 
+        public bool DeleteResponse(Response response)
+        {
+            _context.Remove(response);
+            return Save();
+        }
+
+        public Response GetResponse(Guid Id)
+        {
+            return _context.Responses.Where(r => r.Id == Id).FirstOrDefault();
+        }
+
         public ICollection<Response> GetResponses()
         {
             return _context.Responses.OrderBy(p => p.Id).ToList();

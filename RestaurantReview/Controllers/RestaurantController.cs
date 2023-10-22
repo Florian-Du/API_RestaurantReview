@@ -124,5 +124,31 @@ namespace RestaurantReview.Controllers
 
             return NoContent();
         }
+
+        [HttpDelete("{Id}")]
+        public IActionResult DeleteRestaurant(string Id)
+        {
+            Guid RestaurantId = Guid.Parse(Id);
+
+            if (!_restaurantInterface.RestaurantExist(RestaurantId))
+            {
+                return NotFound();
+            }
+
+            var RestaurantToDelete = _restaurantInterface.GetRestaurant(RestaurantId);
+
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            if (!_restaurantInterface.DeleteRestaurant(RestaurantToDelete))
+            {
+                ModelState.AddModelError("", "Erreur lors de la suppression du commentaire");
+                return StatusCode(500, ModelState);
+            }
+
+            return NoContent();
+        }
     }
 }

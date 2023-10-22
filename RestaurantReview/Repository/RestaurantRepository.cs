@@ -20,6 +20,12 @@ namespace RestaurantReview.Repository
             return Save();
         }
 
+        public bool DeleteRestaurant(Restaurant restaurant)
+        {
+            _context.Remove(restaurant);
+            return Save();
+        }
+
         public Restaurant GetRestaurant(Guid Id)
         {
             return _context.Restaurants.Where(r => r.Id == Id).FirstOrDefault();

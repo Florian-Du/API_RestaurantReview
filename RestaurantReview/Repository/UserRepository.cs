@@ -19,6 +19,12 @@ namespace RestaurantReview.Repository
             return Save();
         }
 
+        public bool DeleteUser(User user)
+        {
+            _context.Remove(user);
+            return Save();
+        }
+
         public User getUser(Guid Id)
         {
             return _context.Users.Where(u => u.Id == Id).FirstOrDefault();

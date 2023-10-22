@@ -36,7 +36,7 @@ namespace RestaurantReview.Controllers
             return Ok(responses);
         }
 
-        [HttpGet("{Id}/note")]
+        [HttpGet("{Id}/RestaurantNote")]
         public IActionResult GetRestaurantNote(string Id)
         {
             Guid RestaurantId = Guid.Parse(Id);
@@ -54,6 +54,22 @@ namespace RestaurantReview.Controllers
             }
 
             return Ok(note);
+        }
+
+        [HttpGet("{Id}/Note")]
+        //[ProducesResponseType(200), Type(IEnumerable<Restaurant>)]
+        public IActionResult getNote(string Id)
+        {
+            Guid NoteId = Guid.Parse(Id);
+
+            var responses = _mapper.Map<NoteDto>(_noteInterface.getNote(NoteId));
+
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            return Ok(responses);
         }
 
         [HttpPost]
@@ -146,5 +162,32 @@ namespace RestaurantReview.Controllers
 
             return NoContent();
         }
+
+        [HttpDelete("{Id}")]
+        public IActionResult DeleteNote(string Id)
+        {
+            Guid NoteId = Guid.Parse(Id);
+
+            if (!_noteInterface.NoteExist(NoteId))
+            {
+                return NotFound();
+            }
+
+            var NoteToDelete = _noteInterface.getNote(NoteId);
+
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            if (!_noteInterface.DeleteNote(NoteToDelete))
+            {
+                ModelState.AddModelError("", "Erreur lors de la suppression du commentaire");
+                return StatusCode(500, ModelState);
+            }
+
+            return NoContent();
+        }
+
     }
 }

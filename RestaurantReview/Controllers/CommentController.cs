@@ -96,7 +96,7 @@ namespace RestaurantReview.Controllers
         }
 
         [HttpPut("{Id}")]
-        public IActionResult UpdateRestaurant(string Id, [FromBody] CommentDto updatedComment)
+        public IActionResult updateComment(string Id, [FromBody] CommentDto updatedComment)
         {
             if (updatedComment == null)
             {
@@ -125,6 +125,32 @@ namespace RestaurantReview.Controllers
             if (!_commentInterface.UpdateComment(CommentMap))
             {
                 ModelState.AddModelError("", "Erreur lors de la mise à jour de la réponse");
+                return StatusCode(500, ModelState);
+            }
+
+            return NoContent();
+        }
+
+        [HttpDelete("{Id}")]
+        public IActionResult DeleteComment(string Id)
+        {
+            Guid CommentId = Guid.Parse(Id);
+
+            if (!_commentInterface.CommentExist(CommentId))
+            {
+                return NotFound();
+            }
+
+            var commentToDelete = _commentInterface.getComment(CommentId);
+
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            if(!_commentInterface.DeleteComment(commentToDelete))
+            {
+                ModelState.AddModelError("", "Erreur lors de la suppression du commentaire");
                 return StatusCode(500, ModelState);
             }
 

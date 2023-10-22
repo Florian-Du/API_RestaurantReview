@@ -37,6 +37,22 @@ namespace RestaurantReview.Controllers
             return Ok(responses);
         }
 
+        [HttpGet("{Id}/Response")]
+        //[ProducesResponseType(200), Type(IEnumerable<Restaurant>)]
+        public IActionResult getResponse(string Id)
+        {
+            Guid ResponseId = Guid.Parse(Id);
+
+            var responses = _mapper.Map<ResponseDto>(_responseInterface.GetResponse(ResponseId));
+
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            return Ok(responses);
+        }
+
         [HttpPost]
         public IActionResult CreateResponse([FromQuery] string _UserId, [FromQuery] string _CommentId, [FromBody] ResponseDto responseDto)
         {
@@ -114,6 +130,32 @@ namespace RestaurantReview.Controllers
             if (!_responseInterface.UpdateResponse(responseMap))
             {
                 ModelState.AddModelError("", "Erreur lors de la mise à jour de la réponse");
+                return StatusCode(500, ModelState);
+            }
+
+            return NoContent();
+        }
+
+        [HttpDelete("{Id}")]
+        public IActionResult DeleteResponse(string Id)
+        {
+            Guid ResponseId = Guid.Parse(Id);
+
+            if (!_responseInterface.ResponseExist(ResponseId))
+            {
+                return NotFound();
+            }
+
+            var ResponseToDelete = _responseInterface.GetResponse(ResponseId);
+
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            if (!_responseInterface.DeleteResponse(ResponseToDelete))
+            {
+                ModelState.AddModelError("", "Erreur lors de la suppression du commentaire");
                 return StatusCode(500, ModelState);
             }
 

@@ -32,6 +32,12 @@ namespace RestaurantReview.Repository
             return Save();
         }
 
+        public bool DeleteComment(Comment comment)
+        {
+            _context.Remove(comment);
+            return Save();
+        }
+
         public Comment getComment(Guid Id)
         {
             return _context.Comments.Where(c => c.Id == Id).FirstOrDefault();

@@ -111,6 +111,32 @@ namespace RestaurantReview.Controllers
 
             return NoContent();
         }
+
+        [HttpDelete("{Id}")]
+        public IActionResult DeleteUser(string Id)
+        {
+            Guid UserId = Guid.Parse(Id);
+
+            if (!_userInterface.UserExist(UserId))
+            {
+                return NotFound();
+            }
+
+            var UserToDelete = _userInterface.getUser(UserId);
+
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            if (!_userInterface.DeleteUser(UserToDelete))
+            {
+                ModelState.AddModelError("", "Erreur lors de la suppression du commentaire");
+                return StatusCode(500, ModelState);
+            }
+
+            return NoContent();
+        }
         private byte[] GenerateSalt()
         {
             // Générer un sel aléatoire de 32 octets (256 bits)
