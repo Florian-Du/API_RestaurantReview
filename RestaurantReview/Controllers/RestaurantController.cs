@@ -88,5 +88,41 @@ namespace RestaurantReview.Controllers
 
             return Ok("Création réussie");
         }
+
+        [HttpPut("{Id}")]
+        public IActionResult UpdateRestaurant(string Id, [FromBody] RestaurantDto updatedRestaurant)
+        {
+            if (updatedRestaurant == null)
+            {
+                return BadRequest(ModelState);
+            }
+
+            Guid RestaurantId = Guid.Parse(Id);
+
+            if (RestaurantId != updatedRestaurant.Id)
+            {
+                return BadRequest(ModelState);
+            }
+
+            if (!_restaurantInterface.RestaurantExist(RestaurantId))
+            {
+                return NotFound();
+            }
+
+            if (!ModelState.IsValid)
+            {
+                return BadRequest();
+            }
+
+            var RestaurantMap = _mapper.Map<Restaurant>(updatedRestaurant);
+
+            if (!_restaurantInterface.UpdateRestaurant(RestaurantMap))
+            {
+                ModelState.AddModelError("", "Erreur lors de la mise à jour de la réponse");
+                return StatusCode(500, ModelState);
+            }
+
+            return NoContent();
+        }
     }
 }

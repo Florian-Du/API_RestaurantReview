@@ -9,6 +9,7 @@ namespace RestaurantReview.Interfaces
         Comment getComment(Guid Id);
         bool CommentExist(Guid Id);
         bool CreateComment(Comment comment);
+        bool UpdateComment(Comment comment);
         bool Save();
     }
 }

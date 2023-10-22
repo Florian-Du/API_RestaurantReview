@@ -76,6 +76,41 @@ namespace RestaurantReview.Controllers
             return Ok("Création réussie");
         }
 
+        [HttpPut("{Id}")]
+        public IActionResult UpdateUser(string Id, [FromBody] UserDto updatedUser)
+        {
+            if (updatedUser == null)
+            {
+                return BadRequest(ModelState);
+            }
+
+            Guid UserId = Guid.Parse(Id);
+
+            if (UserId != updatedUser.Id)
+            {
+                return BadRequest(ModelState);
+            }
+
+            if (!_userInterface.UserExist(UserId))
+            {
+                return NotFound();
+            }
+
+            if (!ModelState.IsValid)
+            {
+                return BadRequest();
+            }
+
+            var UserMap = _mapper.Map<User>(updatedUser);
+
+            if (!_userInterface.UpdateUser(UserMap))
+            {
+                ModelState.AddModelError("", "Erreur lors de la mise à jour de la réponse");
+                return StatusCode(500, ModelState);
+            }
+
+            return NoContent();
+        }
         private byte[] GenerateSalt()
         {
             // Générer un sel aléatoire de 32 octets (256 bits)
@@ -101,6 +136,7 @@ namespace RestaurantReview.Controllers
                 return BitConverter.ToString(hash).Replace("-", "").ToLower();
             }
         }
+
     }
 }
 

@@ -9,6 +9,7 @@ namespace RestaurantReview.Interfaces
         Restaurant GetRestaurant(string Name);
         bool RestaurantExist(Guid Id);
         bool CreateRestaurant(Restaurant restaurant);
+        bool UpdateRestaurant(Restaurant restaurant);
         bool Save();
     }
 }

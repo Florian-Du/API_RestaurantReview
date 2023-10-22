@@ -9,6 +9,7 @@ namespace RestaurantReview.Interfaces
         User getUser(string UserEmail);
         bool UserExist(Guid Id);
         bool CreateUser(User user);
+        bool UpdateUser(User user);
         bool Save();
 
     }

@@ -52,5 +52,11 @@ namespace RestaurantReview.Repository
             var saved = _context.SaveChanges();
             return saved > 0 ? true : false;
         }
+
+        public bool UpdateComment(Comment comment)
+        {
+            _context.Update(comment);
+            return Save(); 
+        }
     }
 }

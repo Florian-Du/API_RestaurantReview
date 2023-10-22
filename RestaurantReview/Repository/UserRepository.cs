@@ -40,6 +40,12 @@ namespace RestaurantReview.Repository
             return saved > 0 ? true : false;
         }
 
+        public bool UpdateUser(User user)
+        {
+            _context.Update(user);
+            return Save();
+        }
+
         public bool UserExist(Guid Id)
         {
             if (_context.Users.Any(r => r.Id == Id))
